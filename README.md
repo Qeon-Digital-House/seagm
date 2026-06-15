@@ -132,9 +132,20 @@ $categories = SeaGm::getProductCategories();
 ```json
 [
     {
-        "id": "mobile-legends",
-        "name": "Mobile Legends",
-        "icon_url": "https://..."
+        "id": 756,
+        "name": "PUBG Mobile UC (MY)",
+        "code": "pubg-mobile-uc-top-up",
+        "mode": "directtopup",
+        "region": "my",
+        "auto_delivery": false
+    },
+    {
+        "id": 930,
+        "name": "PUBG Mobile UC (Global)",
+        "code": "pubg-mobile-uc-top-up-global",
+        "mode": "directtopup",
+        "region": "global",
+        "auto_delivery": false
     }
 ]
 ```
@@ -158,9 +169,56 @@ $products = SeaGm::getProducts('mobile-legends');
 ```json
 [
     {
-        "id": "ml-diamonds",
-        "name": "Mobile Legends Diamonds",
-        "category_id": "mobile-legends"
+        "id": 8915,
+        "name": "60 UC",
+        "category_id": 756,
+        "par_value_currency": "USD",
+        "par_value": "0.99",
+        "currency": "USD",
+        "unit_price": 0.99,
+        "max_amount": 1,
+        "min_amount": 1,
+        "origin_price": 0.99,
+        "discount_rate": 0,
+        "account_check": false,
+        "fields": [
+            {
+                "name": "playerid",
+                "type": "input",
+                "label": "Player ID",
+                "label_zh": "玩家ID",
+                "multiline": false,
+                "placeholder": "Please enter Player ID",
+                "prefix": "",
+                "position": 1
+            }
+        ]
+    },
+    {
+        "id": 4980,
+        "name": "300 + 25 UC",
+        "category_id": 756,
+        "par_value_currency": "USD",
+        "par_value": "4.99",
+        "currency": "USD",
+        "unit_price": 4.99,
+        "max_amount": 1,
+        "min_amount": 1,
+        "origin_price": 4.99,
+        "discount_rate": 0,
+        "account_check": false,
+        "fields": [
+            {
+                "name": "playerid",
+                "type": "input",
+                "label": "Player ID",
+                "label_zh": "玩家ID",
+                "multiline": false,
+                "placeholder": "Please enter Player ID",
+                "prefix": "",
+                "position": 1
+            }
+        ]
     }
 ]
 ```
@@ -179,17 +237,32 @@ Retrieve detail and available denominations for a specific recharge type.
 $items = SeaGm::getProductItems('ml-diamonds');
 ```
 
-**Returns** — product detail with item list, for example:
+**Returns** — product detail object, for example:
 
 ```json
 {
-    "id": "ml-diamonds",
-    "name": "Mobile Legends Diamonds",
-    "items": [
+    "id": 8915,
+    "name": "60 UC",
+    "category_id": 756,
+    "par_value_currency": "USD",
+    "par_value": "0.99",
+    "currency": "USD",
+    "unit_price": 0.99,
+    "max_amount": 1,
+    "min_amount": 1,
+    "origin_price": 0.99,
+    "discount_rate": 0,
+    "account_check": false,
+    "fields": [
         {
-            "type_id": 1001,
-            "name": "86 Diamonds",
-            "price": 15000
+            "name": "playerid",
+            "type": "input",
+            "label": "Player ID",
+            "label_zh": "玩家ID",
+            "multiline": false,
+            "placeholder": "Please enter Player ID",
+            "prefix": "",
+            "position": 1
         }
     ]
 }
@@ -221,13 +294,34 @@ $order = SeaGm::createOrder(
 
 ```json
 {
-    "order_id": 9876543,
-    "mch_order_id": "MY-ORDER-001",
-    "type_id": 1001,
+    "id": 12651331,
+    "trade_id": 11123387,
+    "title": "PUBG Mobile UC (MY) 60 UC",
+    "category_id": 756,
+    "product_id": 8915,
+    "type_id": 8915,
+    "created": 1781514315,
+    "created_time": 1781514315,
+    "currency": "USD",
+    "unit_price": "0.99",
     "buy_amount": 1,
+    "pay_amount": "0.99",
+    "pay_amount_credits": 417,
+    "refunded_amount": "0.00",
+    "refunded_reason": "",
+    "send_amount": "0.000",
+    "paid_time": 1781514315,
+    "sent_time": 0,
+    "pay_status_code": 2,
+    "pay_status": "Paid",
+    "send_status_code": 1,
+    "send_status": "Wait send",
+    "status": "Wait send",
     "status_code": 10001,
-    "pay_status_code": 1,
-    "send_status_code": 1
+    "mch_order_id": "RRQ-TEST-1781514314",
+    "fields": {
+        "playerid": "5960766291"
+    }
 }
 ```
 
@@ -254,11 +348,34 @@ $status = SeaGm::getOrderStatus('MY-ORDER-001', 'mchOrderId');
 
 ```json
 {
-    "order_id": 9876543,
-    "mch_order_id": "MY-ORDER-001",
-    "status_code": 10003,
+    "id": 12651331,
+    "trade_id": 11123387,
+    "title": "PUBG Mobile UC (MY) 60 UC",
+    "category_id": 756,
+    "product_id": 8915,
+    "type_id": 8915,
+    "created": 1781514315,
+    "created_time": 1781514315,
+    "currency": "USD",
+    "unit_price": "0.99",
+    "buy_amount": 1,
+    "pay_amount": "0.99",
+    "pay_amount_credits": 417,
+    "refunded_amount": "0.00",
+    "refunded_reason": "",
+    "send_amount": "0.000",
+    "paid_time": 1781514315,
+    "sent_time": 0,
     "pay_status_code": 2,
-    "send_status_code": 3
+    "pay_status": "Paid",
+    "send_status_code": 1,
+    "send_status": "Wait send",
+    "status": "Wait send",
+    "status_code": 10001,
+    "mch_order_id": "RRQ-TEST-1781514314",
+    "fields": {
+        "playerid": "5960766291"
+    }
 }
 ```
 
@@ -293,9 +410,12 @@ $balance = SeaGm::getBalance();
 
 ```json
 {
-    "uid": "your_account_id",
-    "balance": 500000,
-    "currency": "IDR"
+    "id": "***",
+    "email": "***@***.com",
+    "username": "teamrrqTest",
+    "credits": 9997904,
+    "currency": "USD",
+    "balance": "23719.12"
 }
 ```
 
