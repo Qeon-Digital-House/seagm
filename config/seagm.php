@@ -13,7 +13,4 @@ return [
             : 'https://openapi.seagm.io'
     ),
 
-    'timeout'        => env('SEAGM_TIMEOUT', 30),
-    'callback_url'   => env('SEAGM_CALLBACK_URL'),
-    'callback_token' => env('SEAGM_CALLBACK_TOKEN'),
 ];

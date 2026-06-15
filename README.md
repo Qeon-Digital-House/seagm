@@ -42,9 +42,6 @@ SEAGM_IS_PRODUCTION=false
 | `SEAGM_SECRET_KEY` | Yes | — | Secret key for HMAC SHA256 signature |
 | `SEAGM_IS_PRODUCTION` | No | `true` | `true` = production, `false` = sandbox |
 | `SEAGM_BASE_URL` | No | auto | Override base URL (takes precedence over `SEAGM_IS_PRODUCTION`) |
-| `SEAGM_TIMEOUT` | No | `30` | HTTP request timeout in seconds |
-| `SEAGM_CALLBACK_URL` | No | — | Webhook URL for order status callbacks |
-| `SEAGM_CALLBACK_TOKEN` | No | — | Token for validating incoming callback requests |
 
 | Environment | Base URL |
 |---|---|
@@ -306,7 +303,7 @@ $balance = SeaGm::getBalance();
 
 ### `generateSignature(array $params)`
 
-Generate an HMAC SHA256 signature for a given parameter set. Useful for verifying incoming callback requests against `SEAGM_CALLBACK_TOKEN`.
+Generate an HMAC SHA256 signature for a given parameter set. Useful for verifying incoming callback requests.
 
 > **Note:** This method is `protected` on the `SeaGm` client and is called automatically on every request. It is exposed here for reference when implementing callback validation.
 
@@ -317,12 +314,13 @@ The signature is computed by:
 
 ```php
 // Manual callback validation example
-$token     = config('seagm.callback_token');
 $payload   = $request->all();
-$signature = $request->header('X-Signature');
+$signature = $payload['signature'] ?? '';
 
+unset($payload['signature']);
 ksort($payload);
-$expected = hash_hmac('sha256', http_build_query($payload), $token);
+
+$expected = hash_hmac('sha256', http_build_query($payload), config('seagm.secret_key'));
 
 if (!hash_equals($expected, $signature)) {
     abort(401, 'Invalid signature');

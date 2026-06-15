@@ -22,7 +22,6 @@ class SeaGm
 
         $this->client = new Client([
             'base_uri' => $this->baseUrl . '/',
-            'timeout'  => $config['timeout'] ?? 30,
             'headers'  => [
                 'Accept' => 'application/json',
             ],
