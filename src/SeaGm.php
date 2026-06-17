@@ -68,6 +68,39 @@ class SeaGm
         ]);
     }
 
+    // ==================== CARD METHODS ====================
+
+    public function getCardCategories(): array
+    {
+        return $this->request('GET', 'v1/card-categories');
+    }
+
+    public function getCardTypes(string $categoryId): array
+    {
+        return $this->request('GET', "v1/card-categories/{$categoryId}/card-types");
+    }
+
+    public function createCardOrder(int $typeId, int $buyAmount = 1, string $mchOrderId = ''): array
+    {
+        $params = [
+            'type_id'    => $typeId,
+            'buy_amount' => $buyAmount,
+        ];
+
+        if ($mchOrderId !== '') {
+            $params['mch_order_id'] = $mchOrderId;
+        }
+
+        return $this->request('POST', 'v1/card-orders', $params);
+    }
+
+    public function getCardOrderStatus(int $orderId, string $queryType = 'orderId'): array
+    {
+        return $this->request('GET', "v1/card-orders/{$orderId}", [
+            'query_type' => $queryType,
+        ]);
+    }
+
     // ==================== BALANCE METHODS ====================
 
     public function getBalance(): array

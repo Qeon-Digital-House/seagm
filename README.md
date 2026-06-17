@@ -398,6 +398,187 @@ $orderStatus->isTerminal(); // true
 
 ---
 
+### `getCardCategories()`
+
+Retrieve all available card categories.
+
+```php
+$categories = SeaGm::getCardCategories();
+```
+
+**Returns** — array of card category objects, for example:
+
+```json
+[
+    {
+        "id": 181,
+        "name": "Razer Gold USD (Global Pin)",
+        "code": "razer-gold-usd-global",
+        "mode": "pin",
+        "region": "",
+        "publisher": "",
+        "auto_delivery": true
+    }
+]
+```
+
+---
+
+### `getCardTypes(string $categoryId)`
+
+Retrieve all card types (denominations) under a card category.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `$categoryId` | `string` | Category ID from `getCardCategories()` |
+
+```php
+$types = SeaGm::getCardTypes('1');
+```
+
+**Returns** — array of card type objects, for example:
+
+```json
+[
+    {
+        "id": 8808,
+        "name": "Razer Gold USD 1",
+        "category_id": 181,
+        "category_name": "Razer Gold USD (Global Pin)",
+        "par_value_currency": "USD",
+        "par_value": 1,
+        "currency": "USD",
+        "unit_price": 1,
+        "max_amount": 600,
+        "min_amount": 1,
+        "origin_price": 1,
+        "discount_rate": 0,
+        "has_stock": true
+    }
+]
+```
+
+---
+
+### `createCardOrder(int $typeId, int $buyAmount, string $mchOrderId)`
+
+Create a new card order. On success, the response includes issued card numbers and PINs.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `$typeId` | `int` | — | Card type ID from `getCardTypes()` |
+| `$buyAmount` | `int` | `1` | Quantity to purchase |
+| `$mchOrderId` | `string` | `''` | Your own order reference ID (optional) |
+
+```php
+$order = SeaGm::createCardOrder(
+    typeId: 49,
+    buyAmount: 1,
+    mchOrderId: 'MY-CARD-ORDER-001'
+);
+```
+
+**Returns** — created order detail including card PIN(s) once delivered, for example:
+
+```json
+{
+    "id": 12651334,
+    "trade_id": 11123390,
+    "title": "Razer Gold USD (Global Pin) Razer Gold USD 1",
+    "category_id": 181,
+    "product_id": 8808,
+    "type_id": 8808,
+    "created": 1781690611,
+    "created_time": 1781690611,
+    "currency": "USD",
+    "unit_price": "1.00",
+    "buy_amount": 1,
+    "pay_amount": "1.00",
+    "pay_amount_credits": 422,
+    "refunded_amount": "0.00",
+    "refunded_reason": "",
+    "send_amount": "0.000",
+    "paid_time": 1781690611,
+    "sent_time": 0,
+    "pay_status_code": 2,
+    "pay_status": "Paid",
+    "send_status_code": 1,
+    "send_status": "Wait send",
+    "status": "Wait send",
+    "status_code": 10001,
+    "mch_order_id": "RRQ-CARD-1781690611",
+    "cards": [
+        {
+            "id": 8881121,
+            "card_number": "MYF181221000093",
+            "card_pin": "WMRKR9LGA6KN8SRNN3",
+            "expired": "-"
+        }
+    ]
+}
+```
+
+---
+
+### `getCardOrderStatus(int $orderId, string $queryType)`
+
+Check the status of an existing card order.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `$orderId` | `int` | — | Order ID to query |
+| `$queryType` | `string` | `'orderId'` | Query type: `'orderId'` or `'mchOrderId'` |
+
+```php
+// Query by SeaGM order ID
+$status = SeaGm::getCardOrderStatus(17401657);
+
+// Query by your own merchant order ID
+$status = SeaGm::getCardOrderStatus('MY-CARD-ORDER-001', 'mchOrderId');
+```
+
+**Returns** — order detail with current status and card PIN(s), for example:
+
+```json
+{
+    "id": 12651334,
+    "trade_id": 11123390,
+    "title": "Razer Gold USD (Global Pin) Razer Gold USD 1",
+    "category_id": 181,
+    "product_id": 8808,
+    "type_id": 8808,
+    "created": 1781690611,
+    "created_time": 1781690611,
+    "currency": "USD",
+    "unit_price": "1.00",
+    "buy_amount": 1,
+    "pay_amount": "1.00",
+    "pay_amount_credits": 422,
+    "refunded_amount": "0.00",
+    "refunded_reason": "",
+    "send_amount": "0.000",
+    "paid_time": 1781690611,
+    "sent_time": 0,
+    "pay_status_code": 2,
+    "pay_status": "Paid",
+    "send_status_code": 1,
+    "send_status": "Wait send",
+    "status": "Wait send",
+    "status_code": 10001,
+    "mch_order_id": "RRQ-CARD-1781690611",
+    "cards": [
+        {
+            "id": 8881121,
+            "card_number": "MYF181221000093",
+            "card_pin": "WMRKR9LGA6KN8SRNN3",
+            "expired": "-"
+        }
+    ]
+}
+```
+
+---
+
 ### `getBalance()`
 
 Retrieve the current account balance.
